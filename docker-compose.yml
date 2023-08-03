@@ -1,32 +1,38 @@
-version: '3.8'
+version: '3'
 
 services:
   phpipam-web:
     image: phpipam/phpipam-www:latest
+    container_name: phpipam
     ports:
-      - "80:80"
+      - "4050:80"
     environment:
-      - TZ=Europe/London
-      - IPAM_DATABASE_HOST=my.database.server
-      - IPAM_DATABASE_USER=existing_username
-      - IPAM_DATABASE_PASS=existing_password
-      - IPAM_DATABASE_NAME=existing_db_name
+      - TZ=${TIME_ZONE}
+      - IPAM_DATABASE_HOST=${DATABASE_HOST}
+      - IPAM_DATABASE_USER=${DATABASE_USER}
+      - IPAM_DATABASE_PASS=${DATABASE_PASS}
+      - IPAM_DATABASE_NAME=${DATABASE_NAME}
+      - IPAM_DATABASE_PORT=${DATABASE_PORT}
+      - IPAM_DATABASE_WEBHOST=${DATABASE_WEBHOST}
+      #- IPAM_BASE=${BASE}
     restart: unless-stopped
     volumes:
       - ./phpipam-logo:/phpipam/css/images/logo
       - ./phpipam-ca:/usr/local/share/ca-certificates:ro
-    phpipam-cron:
-      image: phpipam/phpipam-cron:latest
-      environment:
-        - TZ=Europe/London
-        - IPAM_DATABASE_HOST=my.database.server
-        - IPAM_DATABASE_USER=existing_username
-        - IPAM_DATABASE_PASS=existing_password
-        - IPAM_DATABASE_NAME=existing_db_name
-        - SCAN_INTERVAL=1h
-      restart: unless-stopped
-      volumes:
-        - ./phpipam-ca:/usr/local/share/ca-certificates:ro
-      volumes:
-        phpipam-logo:
-        phpipam-ca:
+  
+  phpipam-cron:
+    image: phpipam/phpipam-cron:latest
+    environment:
+      - TZ=${TIME_ZONE}
+      - IPAM_DATABASE_HOST=${DATABASE_HOST}
+      - IPAM_DATABASE_USER=${DATABASE_USER}
+      - IPAM_DATABASE_PASS=${DATABASE_PASS}
+      - IPAM_DATABASE_NAME=${DATABASE_NAME}
+      - SCAN_INTERVAL=${INTERVAL}
+    restart: unless-stopped
+    volumes:
+      - phpipam-ca:/usr/local/share/ca-certificates:ro
+
+volumes:
+  phpipam-logo:
+  phpipam-ca:
