@@ -4,8 +4,9 @@ services:
   phpipam-web:
     image: phpipam/phpipam-www:latest
     container_name: phpipam-www
+    restart: unless-stopped
     ports:
-      - "4050:80"
+      - "${PORT:-4050}:80"
     environment:
       - TZ=${TIME_ZONE}
       - IPAM_DATABASE_HOST=${DATABASE_HOST}
@@ -15,7 +16,6 @@ services:
       - IPAM_DATABASE_PORT=${DATABASE_PORT}
       - IPAM_DATABASE_WEBHOST=${DATABASE_WEBHOST}
       #- IPAM_BASE=${BASE}
-    restart: unless-stopped
     volumes:
       - ./phpipam-logo:/phpipam/css/images/logo
       - ./phpipam-ca:/usr/local/share/ca-certificates:ro
@@ -23,6 +23,7 @@ services:
   phpipam-cron:
     image: phpipam/phpipam-cron:latest
     container_name: phpipam-cron
+    restart: unless-stopped
     environment:
       - TZ=${TIME_ZONE}
       - IPAM_DATABASE_HOST=${DATABASE_HOST}
@@ -30,10 +31,5 @@ services:
       - IPAM_DATABASE_PASS=${DATABASE_PASS}
       - IPAM_DATABASE_NAME=${DATABASE_NAME}
       - SCAN_INTERVAL=${INTERVAL}
-    restart: unless-stopped
     volumes:
-      - phpipam-ca:/usr/local/share/ca-certificates:ro
-
-volumes:
-  phpipam-logo:
-  phpipam-ca:
+      - ./phpipam-ca:/usr/local/share/ca-certificates:ro
