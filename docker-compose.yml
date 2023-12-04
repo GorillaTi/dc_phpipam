@@ -17,8 +17,8 @@ services:
       - IPAM_DATABASE_WEBHOST=${DATABASE_WEBHOST}
       #- IPAM_BASE=${BASE}
     volumes:
-      - /opt/data_container/phpipam/phpipam-logo:/phpipam/css/images/logo
-      - /opt/data_container/phpipam/phpipam-ca:/usr/local/share/ca-certificates
+      - "${DIR:-.}/phpipam/phpipam-logo:/phpipam/css/images/logo"
+      - "${DIR:-.}/phpipam/phpipam-ca:/usr/local/share/ca-certificates"
   
   phpipam-cron:
     image: phpipam/phpipam-cron:latest
@@ -32,4 +32,4 @@ services:
       - IPAM_DATABASE_NAME=${DATABASE_NAME}
       - SCAN_INTERVAL=${INTERVAL}
     volumes:
-      - /opt/data_container/phpipam/phpipam-ca:/usr/local/share/ca-certificates
+      - "${DIR:-.}/phpipam/phpipam-ca:/usr/local/share/ca-certificates"
