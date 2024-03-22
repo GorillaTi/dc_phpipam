@@ -6,8 +6,10 @@
 
 # Ignore local development environment files
 .env
-*!phpipam-logo
-*phpipam-logo/*
+!phpipam/phpipam-logo
+phpipam/phpipam-logo/*
+!phpipam/phpipam-ca
+phpipam/phpipam-ca/*
 
 # Ignore Docker data directories (if you are using volumes)
 /data
